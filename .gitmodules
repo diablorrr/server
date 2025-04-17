@@ -1,0 +1,15 @@
+[submodule "ChatServer"]
+	path = ChatServer
+	url = ./ChatServer
+[submodule "ChatServer2"]
+	path = ChatServer2
+	url = ./ChatServer2
+[submodule "GateServer"]
+	path = GateServer
+	url = ./GateServer
+[submodule "StatusServer"]
+	path = StatusServer
+	url = ./StatusServer
+[submodule "VarifyServer"]
+	path = VarifyServer
+	url = ./VarifyServer
