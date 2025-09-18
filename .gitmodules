@@ -1,0 +1,12 @@
+[submodule "GateServer"]
+	path = GateServer
+	url = https://github.com/ChatChatProject/GateServer.git
+[submodule "StatusServer"]
+	path = StatusServer
+	url = https://github.com/ChatChatProject/StatusServer.git
+[submodule "VarifyServer"]
+	path = VarifyServer
+	url = https://github.com/ChatChatProject/VarifyServer.git
+[submodule "ChatServer"]
+	path = ChatServer
+	url = https://github.com/ChatChatProject/ChatServer.git
