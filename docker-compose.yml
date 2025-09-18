@@ -1,0 +1,89 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    pull_policy: never
+    volumes:
+      - "/home/yoshiki01/docker/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - server
+  mysql:
+    image: mysql_new:latest
+    container_name: mysql-container
+    pull_policy: never
+    ports:
+      - "3303:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    networks:
+      - server
+    healthcheck:
+      test: >
+        mysql -uroot -p123456 -e "SELECT 1 FROM llfc.user LIMIT 1"
+        && mysqladmin ping -uroot -p123456
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  gate:
+    image: gateserver_new:latest
+    container_name: gateserver-container
+    pull_policy: never
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/home/yoshiki01/docker/GateServer/config.ini:/config.ini"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - server
+  status:
+    image: statusserver_new:latest
+    container_name: statusserver-container
+    pull_policy: never
+    volumes:
+      - "/home/yoshiki01/docker/StatusServer/config.ini:/config.ini"
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - server
+  varify:
+    image: varifyserver:latest
+    container_name: varifyserver-container
+    pull_policy: never
+    networks:
+      - server
+  chat1:
+    image: chatserver_new:latest
+    container_name: chatserver-container
+    pull_policy: never
+    ports:
+      - "8090:8090"
+    volumes:
+      - "/home/yoshiki01/docker/ChatServer/config.ini:/config.ini"
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - server
+  chat2:
+    image: chatserver_new:latest
+    container_name: chatserver2-container
+    pull_policy: never
+    ports:
+      - "8091:8091"
+    volumes:
+      - "/home/yoshiki01/docker/ChatServer2/config.ini:/config.ini"
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - server
+
+networks:
+  server:
+    driver: bridge
